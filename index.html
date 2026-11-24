@@ -14,7 +14,8 @@
 :root {
  color-scheme: light;
  --paper:#f5f1e7; --ink:#222a22; --muted:#575e52; --rule:#c9c6b8;
- --green:#294538; --red:#9f392b; --cream:#fffcf4; --water:#2f90b0;
+ --green:#294538; --accent:#9b2f58; --cream:#fffcf4; --water:#2f90b0;
+ --sunset-coral:#ea8061; --sunset-pink:#d55383;
  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
  --serif:Georgia,"Times New Roman",serif;
 }
@@ -24,23 +25,23 @@ button,input,select {font:inherit;color:inherit}
 button,select {cursor:pointer}
 a {color:inherit;text-underline-offset:.2em}
 button,input,select,a {touch-action:manipulation}
-:focus-visible {outline:2px solid var(--red);outline-offset:3px}
+:focus-visible {outline:2px solid var(--accent);outline-offset:3px}
 h1,h2,h3,p {margin:0}
 [hidden],.hidden {display:none!important}
 .wrap {width:min(1460px,100% - 72px);margin-inline:auto}
 .skip-link {position:fixed;top:8px;left:8px;z-index:20;padding:12px;background:var(--cream);transform:translateY(-150%)}
 .skip-link:focus {transform:none}
-.masthead {border-top:5px solid var(--green)}
+.masthead {border-top:5px solid transparent;border-image:linear-gradient(90deg,var(--sunset-coral),var(--sunset-pink)) 1}
 .masthead .wrap {display:flex;align-items:end;justify-content:space-between;gap:24px;padding-top:25px;border-bottom:1px solid var(--ink)}
 .brand {padding-bottom:17px}
 .brand p,.kicker,.map-caption,.count,.category-label,.place-id,.rank {font:600 11px/1.4 var(--mono);letter-spacing:.085em;text-transform:uppercase}
-.brand p {color:var(--red);margin-bottom:5px}
+.brand p {color:var(--accent);margin-bottom:5px}
 h1 {font:normal clamp(46px,6.1vw,97px)/.93 var(--serif);letter-spacing:-.065em;word-spacing:.065em}
 h1 em {color:var(--green);font-weight:normal}
 .tabs {display:flex;gap:22px;align-self:stretch;align-items:end}
 .tabs button {min-height:48px;padding:0 2px;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);white-space:nowrap;font-weight:650}
-.tabs button.active {border-color:var(--red);color:var(--ink)}
-.tabs button:hover {color:var(--red)}
+.tabs button.active {border-color:var(--accent);color:var(--ink)}
+.tabs button:hover {color:var(--accent)}
 .toolbar {display:flex;align-items:center;gap:12px;padding:17px 0}
 .search-field {position:relative;flex:1;min-width:0}
 .search-field > span {position:absolute;top:14px;left:15px;width:13px;height:13px;border:1.6px solid var(--green);border-radius:50%;pointer-events:none}
@@ -69,7 +70,7 @@ select {padding:6px 9px;max-width:100%}
 #map {position:relative;z-index:1;display:block;width:100%;height:100%}
 #map > :not(#pins) {display:none}
 #realMarkers {position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
-.real-pin,.real-cluster {position:absolute;transform:translate(-50%,-50%);border:1.5px solid var(--cream);background:#994431;color:#fff;pointer-events:auto;padding:0;box-shadow:0 1px 5px #142b2e65}
+.real-pin,.real-cluster {position:absolute;transform:translate(-50%,-50%);border:1.5px solid var(--cream);background:var(--accent);color:#fff;pointer-events:auto;padding:0;box-shadow:0 1px 5px #142b2e65}
 .real-pin {width:15px;height:15px;border-radius:50%}
 .real-pin.visited {background:#287458}
 .real-pin.selected {width:22px;height:22px;background:#ffdd75;border:3px solid #252b21;z-index:1}
@@ -85,11 +86,11 @@ select {padding:6px 9px;max-width:100%}
 .layer-picker label {font-size:13px;font-weight:650}
 #mapLayerSelect {min-height:44px}
 .map-legend {display:flex;gap:12px;color:var(--muted);font-size:12px}
-.map-legend span:before {content:"";display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:#994431}
+.map-legend span:before {content:"";display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:var(--accent)}
 .map-legend span:last-child:before {background:#287458}
 .field-notes {display:flex;flex-direction:column;min-width:0;border-left:1px solid var(--ink)}
 .detail {padding:22px 20px;overflow-wrap:anywhere}
-.kicker,.category-label,.place-id {color:var(--red)}
+.kicker,.category-label,.place-id {color:var(--accent)}
 .detail h2 {margin-top:7px;font:normal clamp(29px,3vw,48px)/.98 var(--serif);letter-spacing:-.045em}
 .detail p {margin-top:11px}
 .detail .place-id {color:var(--muted);margin:0 0 7px}
@@ -97,7 +98,7 @@ select {padding:6px 9px;max-width:100%}
 .place-index {padding:0 20px 10px}
 .place-index h2 {padding:11px 0 7px;border-top:1px solid var(--ink)}
 .index-link {padding-inline:0}
-.index-link span:last-child {color:var(--red)}
+.index-link span:last-child {color:var(--accent)}
 .field-progress {margin-top:auto;border-top:1px solid var(--rule);padding:16px 20px}
 .field-progress .row {display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .field-progress strong {font:normal 30px/.95 var(--serif)}
@@ -112,7 +113,7 @@ select {padding:6px 9px;max-width:100%}
 .progress-title h2 {font:normal clamp(42px,6vw,86px)/.95 var(--serif);letter-spacing:-.06em}
 .progress-title p {margin-top:6px}
 .progress-number {text-align:right}
-.progress-number strong {display:block;font:normal clamp(38px,6vw,78px)/.95 var(--serif);color:var(--red);letter-spacing:-.07em}
+.progress-number strong {display:block;font:normal clamp(38px,6vw,78px)/.95 var(--serif);color:var(--accent);letter-spacing:-.07em}
 .progress-layout {display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,31%);gap:30px;padding:22px 0}
 .progress-layout h3 {font:normal 28px/1.1 var(--serif);margin-bottom:12px}
 .progress-list-panel {min-width:0}
@@ -255,7 +256,7 @@ footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;c
   </div>
  </section>
 </main>
-<footer class="wrap"><span>Cartografía y lugares de <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener">GTADB y sus colaboradores</a> · CC BY 4.0</span><span>Leonida Atlas v0.10.0</span></footer>
+<footer class="wrap"><span>Cartografía y lugares de <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener">GTADB y sus colaboradores</a> · CC BY 4.0</span><span>Leonida Atlas v0.10.1</span></footer>
 <script src="assets/landmarks.js?v=092"></script><script src="assets/day-index.js?v=092"></script><script>
 (()=>{'use strict';const $=id=>document.getElementById(id),DATA=(window.LEONIDA_LANDMARKS||[]).map(v=>({id:v[0],name:v[1],cat:v[2],wx:v[3],wy:v[4],full:v[5],reference:v[6],tags:v[7]}));
 const labels={"residential":"Residencial","retail":"Comercios","transportation":"Transporte","natural":"Naturaleza","industrial":"Industrial","hotel":"Hoteles","leisure":"Ocio","government":"Gobierno","events":"Eventos","utilities":"Servicios","restaurant":"Restaurantes","public":"Espacios públicos","landmark":"Lugares destacados","enterable":"Interiores accesibles","other":"Otros"};
@@ -523,7 +524,8 @@ function paintTiles(){
  }
 }
 function updateTiles(){requestPaint()}
-let scale=1,tx=0,ty=0;updateLayerStyle();const pointers=new Map();let lastTap=0,dragged=false,prevPoint=null,prevDist=0;const minScale=1,maxScale=40;
+let scale=1,tx=0,ty=0;updateLayerStyle();const pointers=new Map();let lastTap=0,dragged=false,prevPoint=null,prevDist=0;const minScale=1,maxScale=96;
+const landmarkFocusScale = 64;
 let lastViewport;
 
 function bounds() {
@@ -600,7 +602,7 @@ function selectLandmark(landmark) {
  show('map');
  const position = projectLandmark(landmark);
  if (position) {
-  scale = maxScale;
+  scale = Math.max(scale, landmarkFocusScale);
   const {w, h, unit} = bounds();
   tx = w / 2 - position.u * unit;
   ty = h / 2 - position.v * unit;
