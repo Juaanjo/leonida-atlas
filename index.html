@@ -103,6 +103,12 @@ select {padding:6px 9px;max-width:100%}
 .detail p {margin-top:11px}
 .detail .place-id {color:var(--muted);margin:0 0 7px}
 .detail .btn {margin-top:18px;width:100%}
+.poi-photo {margin:14px 0 0}
+.poi-photo img {display:block;width:min(100%, var(--photo-width));height:auto;max-height:300px;margin-inline:auto;object-fit:contain;border-radius:2px}
+.poi-photo figcaption,.photo-unavailable {font-size:12px;color:var(--muted)}
+.poi-photo figcaption {margin:5px 0 0}
+.poi-photo a {display:block}
+
 .place-index {padding:0 20px 10px}
 .place-index h2 {padding:11px 0 7px;border-top:1px solid var(--ink)}
 #quickPlaces {max-height:300px;overflow:auto;scrollbar-color:#b26b88 transparent}
@@ -277,12 +283,13 @@ footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;c
   </div>
  </section>
 </main>
-<footer class="wrap"><span>Cartografía y lugares de <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener">GTADB y sus colaboradores</a> · CC BY 4.0</span><span>Leonida Atlas v0.10.3</span></footer>
-<script src="assets/landmarks.js?v=092"></script><script src="assets/day-index.js?v=092"></script><script>
+<footer class="wrap"><span>Cartografía, lugares y fotos de <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener">GTADB y sus colaboradores</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · Fotos redimensionadas</span><span>Leonida Atlas v0.10.4</span></footer>
+<script src="assets/landmarks.js?v=092"></script><script src="assets/day-index.js?v=092"></script><script src="assets/poi-photo-index.js"></script><script>
 (()=>{'use strict';const $=id=>document.getElementById(id),DATA=(window.LEONIDA_LANDMARKS||[]).map(v=>({id:v[0],name:v[1],cat:v[2],wx:v[3],wy:v[4],full:v[5],reference:v[6],tags:v[7]}));
 const labels={"residential":"Residencial","retail":"Comercios","transportation":"Transporte","natural":"Naturaleza","industrial":"Industrial","hotel":"Hoteles","leisure":"Ocio","government":"Gobierno","events":"Eventos","utilities":"Servicios","restaurant":"Restaurantes","public":"Espacios públicos","landmark":"Lugares destacados","enterable":"Interiores accesibles","other":"Otros"};
 const KEY='leonida-v09-landmarks-progress';let done;try{done=new Set(JSON.parse(localStorage.getItem(KEY)||'[]').filter(id=>DATA.some(d=>d.id===id)))}catch(e){done=new Set()}
 let selected,category='all',term='',hide=false;const byId=new Map(DATA.map(d=>[d.id,d]));const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...done]));$('storageStatus').textContent='Progreso guardado en este navegador.'}catch(e){$('storageStatus').textContent='Almacenamiento no disponible; exporta tu progreso.'}};
+const photoIndex = window.LEONIDA_POI_PHOTOS || {};
 const filters = $('filters');
 filters.innerHTML = '<option value="all">Todas las categorías</option>' +
  Object.entries(labels).map(([id, label]) => '<option value="' + id + '">' + label + '</option>').join('');
@@ -344,9 +351,21 @@ $('viewDetail').onclick = () => {
  detail.scrollIntoView({block:'nearest'});
 };
 
+function renderPlacePhoto(place) {
+ const size = photoIndex[place.id];
+ if (!size) return '<p class="photo-unavailable">Sin foto del juego para este lugar.</p>';
+ const [width, height] = size;
+ const path = 'assets/poi-photos/' + encodeURIComponent(place.id) + '.jpg';
+ return '<figure class="poi-photo"><a href="' + path + '" target="_blank" rel="noopener" ' +
+  'aria-label="Abrir foto de ' + safe(place.name) + ' en otra pestaña">' +
+  '<img src="' + path + '" width="' + width + '" height="' + height + '" style="--photo-width:' + width + 'px" loading="lazy" decoding="async" ' +
+  'alt="' + safe(place.name) + ' en GTA VI"></a><figcaption>Vista en el juego</figcaption></figure>';
+}
+
 function renderDetail() {
  const d = byId.get(selected);
  $('viewDetail').hidden = !d;
+ $('viewDetail').textContent = d && photoIndex[d.id] ? 'Ver foto y ficha ↓' : 'Ver ficha ↓';
  $('selectedLegend').hidden = !d;
  if (!d) {
   $('detail').innerHTML = '<h2>Explora Leonida</h2><p class="muted">Busca un lugar o elige un marcador para abrir su ficha y registrar tu visita.</p>';
@@ -357,9 +376,17 @@ function renderDetail() {
   '<p class="place-id">' + safe(d.id) + ' · ' + safe(labels[d.cat] || labels.other) + '</p>' +
   '<h2>' + safe(d.name) + '</h2>' +
   (area ? '<p class="muted">' + safe(area) + '</p>' : '') +
+  renderPlacePhoto(d) +
   (d.reference ? '<p class="muted">Referencia real<br>' + safe(d.reference) + '</p>' : '') +
   '<button type="button" id="toggleDone" class="btn' + (visited ? ' secondary' : '') + '" aria-pressed="' + visited + '">' +
   (visited ? '✓ Visitado · Desmarcar' : 'Marcar como visitado') + '</button>';
+ const photo = $('detail').querySelector('.poi-photo img');
+ photo?.addEventListener('error', () => {
+  const message = document.createElement('p');
+  message.className = 'photo-unavailable';
+  message.textContent = 'No se pudo cargar la foto del juego.';
+  photo.closest('figure').replaceWith(message);
+ }, {once:true});
  $('toggleDone').onclick = () => {
   if (visited) done.delete(d.id);
   else done.add(d.id);
