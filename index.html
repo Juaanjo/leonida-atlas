@@ -1,47 +1,431 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Leonida Atlas v0.9.10</title><style>
-:root{color-scheme:dark;--bg:#10131e;--panel:#1b2030;--line:#343348;--text:#f4f0f7;--muted:#aaa7b9;--mint:#54dfc9;--pink:#ee8dbb;--purple:#b794f4}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px system-ui,-apple-system,Segoe UI,sans-serif}button,input{font:inherit}button{cursor:pointer}header{background:linear-gradient(105deg,#241d38,#4b244f 58%,#9b476e);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #6d476a}h1{font-size:20px;margin:0;letter-spacing:.09em}h1 span{color:#f6a1d0}.sub{font-size:10px;letter-spacing:.22em;color:#e4bbd4}.wrap{max-width:1320px;margin:auto;padding:16px}.tabs{display:flex;gap:8px;margin-bottom:16px}.tabs button,.chip,.btn{border:1px solid var(--line);background:#222536;color:var(--text);border-radius:9px;padding:10px 13px}.tabs button.active,.chip.active{border-color:var(--pink);background:#42283f;color:#ffd0e9}.top{display:flex;justify-content:space-between;gap:20px;align-items:center}.top h2{margin:0 0 4px;font-size:24px}.muted{color:var(--muted)}.progress{width:180px;max-width:40vw}.track{height:8px;border-radius:10px;background:#373649;overflow:hidden;margin-top:8px}.fill{height:100%;background:var(--mint);width:0}.controls{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;margin:16px 0;display:flex;flex-wrap:wrap;gap:9px;align-items:center}input[type=search]{background:#111724;border:1px solid #3b3b54;border-radius:8px;padding:11px;color:white;flex:1 1 260px;min-width:160px}.chip{font-size:12px}.check{display:flex;align-items:center;gap:6px;font-size:12px;color:#d5d0df}input[type=checkbox]{accent-color:var(--mint)}.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px}.mapbox{height:min(66vh,650px);min-height:380px;position:relative;overflow:hidden;border:1px solid #775379;border-radius:14px;background:#153a52;touch-action:none;user-select:none;cursor:grab}.mapbox:active{cursor:grabbing}#map{width:100%;height:100%;display:block;touch-action:none}.mapoverlay{position:absolute;top:12px;left:12px;background:#151827db;border:1px solid #73617d;padding:8px 10px;border-radius:8px;font-size:11px;pointer-events:none}.zoom{position:absolute;z-index:4;bottom:15px;right:15px;display:grid;gap:6px}.zoom button{border:1px solid #62617c;border-radius:8px;background:#181e2de8;color:white;width:42px;height:42px;font-size:23px}.tip{position:absolute;bottom:16px;left:14px;background:#121825c9;padding:8px 10px;border-radius:7px;font-size:11px;color:#cbd0de;pointer-events:none}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}.card h3{font-size:18px;margin:6px 0 10px}.tag{font-size:11px;font-weight:700;letter-spacing:.08em}.btn{background:var(--mint);color:#11272a;border:0;font-weight:750;width:100%;margin-top:16px}.btn.secondary{background:#343247;color:white}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}.stat{background:var(--panel);border:1px solid var(--line);padding:16px;border-radius:12px}.stat strong{display:block;font-size:28px;color:var(--mint)}.catstat{margin:14px 0}.row{display:flex;justify-content:space-between;gap:12px}.listitem{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;background:transparent;color:white;border:0;border-bottom:1px solid var(--line);padding:14px 5px}.listitem:hover{background:#2b2c41}.hidden{display:none!important}.pin{cursor:pointer}.pin circle{stroke:#172134;stroke-width:3}.pin.selected circle{stroke:white;stroke-width:4}.pin text{font-size:17px;text-anchor:middle;dominant-baseline:middle;fill:#111824;font-weight:900;pointer-events:none}.pin.done circle{fill:#637d7d}.pin.done text{fill:#fff}.empty{padding:20px;color:var(--muted)}footer{font-size:11px;color:#8c8ca2;padding:20px;text-align:center}@media(max-width:780px){.layout{grid-template-columns:1fr}.mapbox{height:54vh;min-height:350px}.top h2{font-size:20px}.wrap{padding:10px}.controls{margin:12px 0}.tip{font-size:10px}.card{padding:14px}}
-
-.map-source{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0;color:#d7c5d7;font-size:12px}.map-source label{background:#38283d;border:1px solid #74516c;padding:9px 12px;border-radius:9px;cursor:pointer}.map-source input{display:none}.map-source small{color:#b9acbb}.source-info{font-size:11px;color:#bcaebe}.map-imported #illustratedMap{display:none}.map-imported #gtadbLayer{display:block!important}
-.layer-picker{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0}.layer-picker label{color:#d4c3d4;font-size:12px}.layer-picker select{background:#222536;color:#fff;border:1px solid #775379;border-radius:9px;padding:10px 12px}.layer-picker small{color:#a9a7bb}
-#tileCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
-#map{position:relative;z-index:1}
-#map > :not(#pins){display:none}
-
-#realMarkers{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
-.real-pin{position:absolute;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;border:2px solid #fff;background:#ed82b2;box-shadow:0 1px 7px #000a;pointer-events:auto;cursor:pointer;padding:0}
-.real-pin.visited{background:#53cba5}
-.real-pin.selected{background:#ffdf62;width:19px;height:19px;z-index:1}
-.real-cluster{position:absolute;transform:translate(-50%,-50%);min-width:28px;height:28px;border-radius:30px;border:2px solid white;background:#b94f85;color:white;font-size:11px;font-weight:800;pointer-events:auto;cursor:pointer}
-#searchResults{display:flex;flex-direction:column;gap:3px;max-height:240px;overflow:auto;width:100%;flex-basis:100%;order:2}#searchResults:empty{display:none}.search-result{text-align:left;border:1px solid #494254;background:#242334;color:#f5edf4;border-radius:8px;padding:9px;cursor:pointer}.search-result:hover,.search-result:focus{background:#48374d} </style></head><body><header><div><h1>LEONIDA <span>ATLAS</span></h1><div class="sub">GTA VI COMPANION · MAPA GTADB</div></div><div style="font-size:12px;color:#fbd2e8">v0.9.10</div></header><main class="wrap"><nav class="tabs"><button id="mapTab" class="active">◈ Mapa</button><button id="progressTab">▥ Mi progreso</button></nav><section id="mapView"><div class="top"><div><h2>Explora Leonida</h2><div class="muted">Descubre secretos, actividades y coleccionables</div></div><div class="progress"><div class="row"><strong id="pct">0%</strong><span class="muted" id="fraction">0/3754</span></div><div class="track"><div class="fill" id="fill"></div></div></div></div><div class="controls"><input id="search" type="search" placeholder="⌕ Buscar lugares y secretos…" aria-label="Buscar localizaciones"><div id="filters" style="display:flex;flex-wrap:wrap;gap:6px"><button class="chip active" data-cat="all">Todos</button><button class="chip" data-cat="secret">◆ Secretos</button><button class="chip" data-cat="collect">★ Coleccionables</button><button class="chip" data-cat="activity">◉ Actividades</button><button class="chip" data-cat="service">▣ Servicios</button></div><label class="check"><input id="hideDone" type="checkbox"> Ocultar completados</label><span id="visibleCount" class="muted" style="font-size:12px"></span></div><div class="map-source" style="display:none"><label for="mapFile">↥ Cargar imagen de mapa GTADB</label><input id="mapFile" type="file" accept="image/png,image/jpeg,image/webp"/><button id="clearMap" class="btn secondary" style="padding:9px 12px">Restaurar mapa demo</button><small id="sourceLabel">Cartografía GTADB YANIS v18 · posiciones de marcadores provisionales</small></div><div class="layer-picker"><label for="mapLayerSelect">Estilo del mapa</label><select id="mapLayerSelect"><option value="day">☀ In-game Day</option><option value="yanis">▧ Detallado · YANIS v18</option><option value="night">☾ Nocturno · YANIS</option></select><small>Cartografía comunitaria · GTADB</small></div><div class="layout"><div class="mapbox" id="mapbox"><canvas id="tileCanvas" aria-hidden="true"></canvas><svg id="map" viewBox="0 0 1024 1024" preserveAspectRatio="none" aria-label="Cartografía GTADB interactiva"><defs><pattern id="blocks" width="50" height="50" patternUnits="userSpaceOnUse"><rect x="4" y="5" width="36" height="31" rx="3" fill="#56636b" opacity=".45"/><path d="M44 0V50M0 42H50" stroke="#b98da5" stroke-width="6" opacity=".55"/></pattern><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#8ba0a9" stroke-width=".6" opacity=".2"/></pattern></defs><rect width="1000" height="700" fill="#13516a"/><rect width="1000" height="700" fill="url(#grid)"/><path d="M0 0H625Q585 70 633 144Q685 212 609 279Q557 355 623 416Q659 492 565 560L520 700H0Z" fill="#426b57" stroke="#94bea4" stroke-width="5"/><path d="M790 0H1000V700H775Q811 630 761 570Q733 492 789 440Q815 354 765 302Q722 241 781 174Q814 92 790 0Z" fill="#47715d" stroke="#9bc4aa" stroke-width="5"/><path d="M50 60H585L585 645H50Z" fill="url(#blocks)" opacity=".8"/><path d="M800 45H975V670H800Z" fill="url(#blocks)" opacity=".8"/><g stroke="#d9a4b9" stroke-width="13" fill="none" opacity=".8"><path d="M0 195L620 207L795 242L1000 244"/><path d="M0 495L615 473L795 490L1000 490"/><path d="M240 0L250 700"/><path d="M465 0L449 700"/><path d="M886 0L888 700"/></g><g stroke="#4c4b62" stroke-width="3" fill="none"><path d="M0 195L620 207L795 242L1000 244"/><path d="M0 495L615 473L795 490L1000 490"/><path d="M240 0L250 700"/><path d="M465 0L449 700"/><path d="M886 0L888 700"/></g><g fill="#e7dce5" font-size="22" font-weight="800" letter-spacing="5" opacity=".85"><text x="130" y="115">NORTH LEONIDA</text><text x="180" y="380">VICE CITY</text><text x="795" y="120">EAST COAST</text><text x="110" y="625">SOUTH BEACH</text></g><g fill="#8cdae7" font-size="19" font-style="italic"><text x="633" y="620">Bahía de Leonida</text></g><image id="gtadbLayer" href="" x="0" y="0" width="1000" height="700" preserveAspectRatio="none" style="display:none"/><rect x="0" y="0" width="1024" height="1024" fill="#2b6399"/><g id="gtadbTiles"></g><g id="pins"></g></svg><div id="realMarkers" aria-label="Marcadores de localizaciones"></div><div class="mapoverlay" id="mapStatus">◉ GTADB · YANIS v18 · PINES DEMO</div><div class="tip">Arrastra · Pellizca · Doble toque</div><div class="zoom"><button id="zoomIn" aria-label="Acercar">+</button><button id="zoomOut" aria-label="Alejar">−</button><button id="resetMap" aria-label="Restablecer vista" style="font-size:16px">⌖</button></div></div><aside class="card" id="detail"></aside></div></section><section id="progressView" class="hidden"><h2>Mi progreso</h2><p class="muted">Los cambios se guardan automáticamente en este navegador.</p><div class="card" style="margin-bottom:14px"><strong>Guardar una copia de tu progreso</strong><p class="muted" style="font-size:12px">Al abrir archivos HTML locales, Opera puede separar el almacenamiento entre archivos o sesiones. Exporta una copia para recuperarla en cualquier versión.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="exportProgress" style="width:auto;margin-top:4px">↓ Exportar progreso</button><button class="btn secondary" id="importProgress" style="width:auto;margin-top:4px">↑ Importar progreso</button><input id="progressFile" type="file" accept="application/json,.json" style="display:none"></div><p id="storageStatus" class="muted" style="font-size:11px;margin-bottom:0" aria-live="polite"></p></div><div class="stats"><div class="stat">Completado<strong id="statPct">0%</strong></div><div class="stat">Localizaciones<strong id="statCount">0/3754</strong></div></div><div class="layout"><div class="card"><h3>Por categoría</h3><div id="catStats"></div></div><div class="card"><h3>Localizaciones</h3><div id="progressList"></div><button class="btn secondary" id="resetProgress">Reiniciar progreso</button></div></div></section></main><footer>Cartografía: GTADB.ORG · YANIS v18 · CC BY 4.0 · <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener" style="color:#ee8dbb">Fuente y atribución</a><br>v0.9.10 · Teselas y localizaciones de GTADB · Progreso local al dispositivo</footer><script src="assets/landmarks.js?v=092"></script><script src="assets/day-index.js?v=092"></script><script>
+<!doctype html>
+<html lang="es" data-type="software">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
+<meta name="theme-color" content="#f5f1e7">
+<meta name="description" content="Mapa interactivo de Leonida para GTA VI. Busca lugares y registra tus visitas.">
+<title>Leonida Atlas · Mapa de GTA VI</title>
+<meta property="og:title" content="Leonida Atlas">
+<meta property="og:description" content="Mapa interactivo de Leonida para GTA VI.">
+<style>
+:root {
+ color-scheme: light;
+ --paper:#f5f1e7; --ink:#222a22; --muted:#575e52; --rule:#c9c6b8;
+ --green:#294538; --red:#9f392b; --cream:#fffcf4; --water:#2f90b0;
+ --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+ --serif:Georgia,"Times New Roman",serif;
+}
+* {box-sizing:border-box}
+body {margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+button,input,select {font:inherit;color:inherit}
+button,select {cursor:pointer}
+a {color:inherit;text-underline-offset:.2em}
+button,input,select,a {touch-action:manipulation}
+:focus-visible {outline:2px solid var(--red);outline-offset:3px}
+h1,h2,h3,p {margin:0}
+[hidden],.hidden {display:none!important}
+.wrap {width:min(1460px,100% - 72px);margin-inline:auto}
+.skip-link {position:fixed;top:8px;left:8px;z-index:20;padding:12px;background:var(--cream);transform:translateY(-150%)}
+.skip-link:focus {transform:none}
+.masthead {border-top:5px solid var(--green)}
+.masthead .wrap {display:flex;align-items:end;justify-content:space-between;gap:24px;padding-top:25px;border-bottom:1px solid var(--ink)}
+.brand {padding-bottom:17px}
+.brand p,.kicker,.map-caption,.count,.category-label,.place-id,.rank {font:600 11px/1.4 var(--mono);letter-spacing:.085em;text-transform:uppercase}
+.brand p {color:var(--red);margin-bottom:5px}
+h1 {font:normal clamp(46px,6.1vw,97px)/.93 var(--serif);letter-spacing:-.065em;word-spacing:.065em}
+h1 em {color:var(--green);font-weight:normal}
+.tabs {display:flex;gap:22px;align-self:stretch;align-items:end}
+.tabs button {min-height:48px;padding:0 2px;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);white-space:nowrap;font-weight:650}
+.tabs button.active {border-color:var(--red);color:var(--ink)}
+.tabs button:hover {color:var(--red)}
+.toolbar {display:flex;align-items:center;gap:12px;padding:17px 0}
+.search-field {position:relative;flex:1;min-width:0}
+.search-field > span {position:absolute;top:14px;left:15px;width:13px;height:13px;border:1.6px solid var(--green);border-radius:50%;pointer-events:none}
+.search-field > span::after {content:"";position:absolute;left:10px;top:10px;width:6px;border-top:1.6px solid var(--green);transform:rotate(45deg);transform-origin:left}
+input[type=search],select {min-height:44px;background:var(--cream);border:1px solid var(--rule);border-radius:2px}
+input[type=search] {width:100%;padding:8px 12px 8px 41px}
+select {padding:6px 9px;max-width:100%}
+.check {display:flex;align-items:center;gap:6px;min-height:44px;padding-inline:5px;font-size:13px;white-space:nowrap;cursor:pointer}
+.check input {margin:0;width:16px;height:16px;accent-color:var(--green)}
+#searchResults {position:absolute;inset:calc(100% + 5px) 0 auto;z-index:8;max-height:min(55vh,380px);overflow:auto;background:var(--cream);border:1px solid var(--rule);box-shadow:0 7px 14px #222a2220}
+#searchResults:empty {display:none}
+.search-result,.listitem,.index-link {display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:47px;text-align:left;background:none;border:0;border-bottom:1px solid var(--rule);padding:10px 12px}
+.search-result:last-child,.index-link:last-child {border-bottom:0}
+.search-result:is(:hover,:focus-visible),.listitem:hover,.index-link:hover {background:#e8e8d9;color:var(--green)}
+.search-result strong,.search-result small {display:block}
+.search-result small,.muted {color:var(--muted)}
+.search-result small {font-size:12px}
+.empty-results {padding:14px}
+.map-layout {display:grid;grid-template-columns:minmax(0,1fr) minmax(255px,27%);border:1px solid var(--ink);background:var(--cream)}
+.map-column {min-width:0}
+.map-caption {min-height:40px;padding:7px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--green);color:var(--cream)}
+.map-caption span:last-child {white-space:nowrap}
+.mapbox {height:clamp(450px,61vh,745px);position:relative;overflow:hidden;background:var(--water);touch-action:none;user-select:none;cursor:grab}
+.mapbox:active {cursor:grabbing}
+#tileCanvas {position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+#map {position:relative;z-index:1;display:block;width:100%;height:100%}
+#map > :not(#pins) {display:none}
+#realMarkers {position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.real-pin,.real-cluster {position:absolute;transform:translate(-50%,-50%);border:1.5px solid var(--cream);background:#994431;color:#fff;pointer-events:auto;padding:0;box-shadow:0 1px 5px #142b2e65}
+.real-pin {width:15px;height:15px;border-radius:50%}
+.real-pin.visited {background:#287458}
+.real-pin.selected {width:22px;height:22px;background:#ffdd75;border:3px solid #252b21;z-index:1}
+.real-cluster {min-width:25px;height:25px;border-radius:50%;padding-inline:3px;background:#294538ed;font:650 11px var(--mono)}
+.real-pin:hover,.real-cluster:hover {outline:2px solid #fff}
+.zoom {position:absolute;right:13px;bottom:13px;z-index:4;display:grid;border:1px solid var(--ink);background:var(--cream)}
+.zoom button {width:44px;height:44px;border:0;background:transparent;font-size:23px}
+.zoom button + button {border-top:1px solid var(--rule)}
+.zoom button:hover {background:#e6e9dc}
+.zoom button:last-child {font-size:22px}
+.map-tools {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:7px 13px;border-top:1px solid var(--ink)}
+.layer-picker {display:flex;align-items:center;gap:8px}
+.layer-picker label {font-size:13px;font-weight:650}
+#mapLayerSelect {min-height:44px}
+.map-legend {display:flex;gap:12px;color:var(--muted);font-size:12px}
+.map-legend span:before {content:"";display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:#994431}
+.map-legend span:last-child:before {background:#287458}
+.field-notes {display:flex;flex-direction:column;min-width:0;border-left:1px solid var(--ink)}
+.detail {padding:22px 20px;overflow-wrap:anywhere}
+.kicker,.category-label,.place-id {color:var(--red)}
+.detail h2 {margin-top:7px;font:normal clamp(29px,3vw,48px)/.98 var(--serif);letter-spacing:-.045em}
+.detail p {margin-top:11px}
+.detail .place-id {color:var(--muted);margin:0 0 7px}
+.detail .btn {margin-top:18px;width:100%}
+.place-index {padding:0 20px 10px}
+.place-index h2 {padding:11px 0 7px;border-top:1px solid var(--ink)}
+.index-link {padding-inline:0}
+.index-link span:last-child {color:var(--red)}
+.field-progress {margin-top:auto;border-top:1px solid var(--rule);padding:16px 20px}
+.field-progress .row {display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.field-progress strong {font:normal 30px/.95 var(--serif)}
+.track {height:4px;background:#deded0;margin-top:8px}
+.fill {height:100%;background:var(--green)}
+.btn {min-height:44px;background:var(--green);color:#fff;border:1px solid var(--green);border-radius:2px;padding:8px 13px;font-weight:650}
+.btn:hover {background:#1b3429}
+.btn.secondary {background:transparent;color:var(--green)}
+.btn.secondary:hover {background:#e8eadf}
+.btn:active,.zoom button:active {filter:brightness(.91)}
+.progress-title {display:flex;justify-content:space-between;align-items:end;gap:16px;border-block:1px solid var(--ink);padding:20px 0}
+.progress-title h2 {font:normal clamp(42px,6vw,86px)/.95 var(--serif);letter-spacing:-.06em}
+.progress-title p {margin-top:6px}
+.progress-number {text-align:right}
+.progress-number strong {display:block;font:normal clamp(38px,6vw,78px)/.95 var(--serif);color:var(--red);letter-spacing:-.07em}
+.progress-layout {display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,31%);gap:30px;padding:22px 0}
+.progress-layout h3 {font:normal 28px/1.1 var(--serif);margin-bottom:12px}
+.progress-list-panel {min-width:0}
+.list-summary {padding:5px 0 11px;border-bottom:1px solid var(--ink);color:var(--muted);font-size:13px}
+#progressList {max-height:590px;overflow:auto}
+.listitem {padding-inline:8px}
+.listitem small {margin-left:5px}
+.visit-status {color:var(--green);font-weight:700}
+.progress-side {border-left:1px solid var(--rule);padding-left:22px}
+.catstat {padding:5px 0}
+.catstat .row {display:flex;justify-content:space-between;gap:6px;font-size:13px}
+.catstat .track {height:3px;margin-top:4px}
+.backup {border-top:1px solid var(--rule);padding-top:15px;margin-top:18px}
+.backup p {font-size:13px;margin-bottom:10px}
+.backup-buttons {display:flex;flex-wrap:wrap;gap:8px}
+#storageStatus:empty {display:none}
+#storageStatus {margin-top:8px}
+#resetProgress {margin-top:12px}
+footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--muted);padding:12px 0 20px;font-size:12px}
+[data-enter] {animation:atlas-in .3s ease-out both}
+@keyframes atlas-in {from {opacity:0;transform:translateY(4px)}}
+@media (prefers-reduced-motion:reduce) {[data-enter] {animation:none}}
+@media (max-width:1050px) {.wrap {width:calc(100% - 40px)} .toolbar{gap:8px}.map-legend{gap:8px}}
+@media (max-width:720px) {
+ .wrap {width:calc(100% - 24px)}
+ .masthead .wrap {display:block;padding-top:13px}
+ .brand {padding-bottom:5px}
+ .brand p {font-size:10px;margin-bottom:3px}
+ h1 {font-size:clamp(44px,11vw,70px)}
+ .tabs {gap:20px}
+ .tabs button {min-height:44px}
+ .toolbar {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 8px;padding:9px 0}
+ .search-field {grid-column:1/-1}
+ #filters {width:100%;min-width:0}
+ .check {font-size:12px}
+ .map-layout,.progress-layout {grid-template-columns:minmax(0,1fr)}
+ .mapbox {height:clamp(310px,53svh,540px)}
+ .map-caption {font-size:10px;min-height:34px;padding-inline:9px}
+ .map-tools {padding-inline:9px}
+ .field-notes {border-left:0;border-top:1px solid var(--ink)}
+ .detail {padding:19px 14px}
+ .place-index {padding-inline:14px}
+ .field-progress {padding:13px 14px}
+ .progress-layout {gap:20px}
+ .progress-side {border-left:0;border-top:1px solid var(--rule);padding:16px 0 0}
+}
+@media (max-width:360px) {
+ .map-legend {gap:6px;font-size:10px}
+ .layer-picker {gap:5px}
+ #mapLayerSelect {max-width:119px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al mapa y filtros</a>
+<header class="masthead">
+ <div class="wrap">
+  <div class="brand">
+   <p>Mapa interactivo de GTA VI</p>
+   <h1>Leonida <em>Atlas</em></h1>
+  </div>
+  <nav class="tabs" aria-label="Vistas">
+   <button id="mapTab" class="active" aria-controls="mapView" aria-pressed="true" type="button">Mapa</button>
+   <button id="progressTab" aria-controls="progressView" aria-pressed="false" type="button">Mi progreso</button>
+  </nav>
+ </div>
+</header>
+<main id="main" class="wrap" tabindex="-1">
+ <div class="toolbar" aria-label="Buscar y filtrar lugares">
+  <div class="search-field">
+   <span aria-hidden="true"></span>
+   <input id="search" type="search" placeholder="Buscar por nombre, zona o referencia" aria-label="Buscar lugares" autocomplete="off">
+   <div id="searchResults" aria-label="Resultados"></div>
+  </div>
+  <select id="filters" aria-label="Categoría de lugares"></select>
+  <label class="check"><input id="hideDone" type="checkbox"> Ocultar visitados</label>
+ </div>
+ <section id="mapView" aria-label="Mapa de Leonida">
+  <div class="map-source" hidden>
+   <label for="mapFile">Cargar imagen de mapa GTADB</label><input id="mapFile" type="file" accept="image/png,image/jpeg,image/webp">
+   <button id="clearMap" type="button">Restaurar mapa</button><small id="sourceLabel"></small>
+  </div>
+  <div class="map-layout" data-enter>
+   <div class="map-column">
+    <div class="map-caption"><span id="mapStatus"></span><span id="visibleCount" role="status"></span></div>
+    <div class="mapbox" id="mapbox" role="region" tabindex="-1" aria-label="Cartografía interactiva de Leonida">
+     <canvas id="tileCanvas" aria-hidden="true"></canvas>
+     <svg id="map" viewBox="0 0 1024 1024" aria-hidden="true"><image id="gtadbLayer" x="0" y="0" width="1024" height="1024"/><g id="pins"></g></svg>
+     <div id="realMarkers" aria-label="Marcadores de lugares"></div>
+     <div class="zoom" aria-label="Controles del mapa">
+      <button id="zoomIn" type="button" aria-label="Acercar">+</button>
+      <button id="zoomOut" type="button" aria-label="Alejar">−</button>
+      <button id="resetMap" type="button" aria-label="Restablecer vista">⌖</button>
+     </div>
+    </div>
+    <div class="map-tools">
+     <div class="layer-picker"><label for="mapLayerSelect">Capa</label><select id="mapLayerSelect"><option value="day">Day</option><option value="yanis">YANIS v18</option><option value="night">Nocturna</option></select></div>
+     <div class="map-legend" aria-label="Leyenda"><span>Lugar</span><span>Visitado</span></div>
+    </div>
+   </div>
+   <aside class="field-notes" aria-label="Lugares y registro">
+    <div id="detail" class="detail" aria-live="polite"></div>
+    <section class="place-index" aria-labelledby="indexTitle">
+     <h2 id="indexTitle" class="kicker">Lugares destacados</h2>
+     <div id="quickPlaces"></div>
+    </section>
+    <div class="field-progress">
+     <div class="row"><span class="kicker">Visitados</span><strong id="pct">0%</strong></div>
+     <span id="fraction" class="muted"></span>
+     <div class="track" aria-hidden="true"><div class="fill" id="fill"></div></div>
+    </div>
+   </aside>
+  </div>
+ </section>
+ <section id="progressView" class="hidden" aria-labelledby="progressTitle">
+  <div class="progress-title">
+   <div><h2 id="progressTitle">Mi progreso</h2><p class="muted">Tus visitas se guardan en este navegador.</p></div>
+   <div class="progress-number"><strong id="statPct">0%</strong><span id="statCount" class="muted"></span></div>
+  </div>
+  <div class="progress-layout">
+   <section class="progress-list-panel" aria-labelledby="listTitle">
+    <h3 id="listTitle">Localizaciones</h3>
+    <div id="progressList"></div>
+   </section>
+   <aside class="progress-side" aria-label="Categorías y copia de progreso">
+    <h3>Por categoría</h3><div id="catStats"></div>
+    <section class="backup" aria-labelledby="backupTitle">
+     <h3 id="backupTitle">Copia de progreso</h3>
+     <p class="muted">Exporta tus visitas para recuperarlas en otro navegador.</p>
+     <div class="backup-buttons">
+      <button class="btn" id="exportProgress" type="button">Exportar</button>
+      <button class="btn secondary" id="importProgress" type="button">Importar</button>
+      <input id="progressFile" type="file" accept="application/json,.json" hidden>
+     </div>
+     <p id="storageStatus" class="muted" role="status"></p>
+     <button class="btn secondary" id="resetProgress" type="button">Reiniciar progreso</button>
+    </section>
+   </aside>
+  </div>
+ </section>
+</main>
+<footer class="wrap"><span>Cartografía y lugares de <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener">GTADB y sus colaboradores</a> · CC BY 4.0</span><span>Leonida Atlas v0.10.0</span></footer>
+<script src="assets/landmarks.js?v=092"></script><script src="assets/day-index.js?v=092"></script><script>
 (()=>{'use strict';const $=id=>document.getElementById(id),DATA=(window.LEONIDA_LANDMARKS||[]).map(v=>({id:v[0],name:v[1],cat:v[2],wx:v[3],wy:v[4],full:v[5],reference:v[6],tags:v[7]}));
-const labels={"residential":"Residencial","retail":"Comercios","transportation":"Transporte","natural":"Naturaleza","industrial":"Industrial","hotel":"Hoteles","leisure":"Ocio","government":"Gobierno","events":"Eventos","utilities":"Servicios","restaurant":"Restaurantes","public":"Espacios públicos","landmark":"Lugares destacados","enterable":"Interiores accesibles","other":"Otros"},colors={residential:'#d4a1c7',retail:'#f2bf6b',transportation:'#86b7f4',natural:'#72c7a1',industrial:'#b5a9ca',hotel:'#ee8dbb',leisure:'#c897f4',government:'#86b7f4',events:'#f2bf6b',utilities:'#57e0cb',restaurant:'#f4b18d',public:'#8dd6c9',landmark:'#ffe3a3',enterable:'#bd9cf2',other:'#a5acbd'};
+const labels={"residential":"Residencial","retail":"Comercios","transportation":"Transporte","natural":"Naturaleza","industrial":"Industrial","hotel":"Hoteles","leisure":"Ocio","government":"Gobierno","events":"Eventos","utilities":"Servicios","restaurant":"Restaurantes","public":"Espacios públicos","landmark":"Lugares destacados","enterable":"Interiores accesibles","other":"Otros"};
 const KEY='leonida-v09-landmarks-progress';let done;try{done=new Set(JSON.parse(localStorage.getItem(KEY)||'[]').filter(id=>DATA.some(d=>d.id===id)))}catch(e){done=new Set()}
-let selected=DATA[0]?.id,category='all',term='',hide=false;const byId=new Map(DATA.map(d=>[d.id,d]));const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...done]));$('storageStatus').textContent='Progreso guardado en este navegador.'}catch(e){$('storageStatus').textContent='Almacenamiento no disponible; exporta tu progreso.'}};
-const filters=$('filters');filters.innerHTML='<button class="chip active" data-cat="all">Todos</button>'+Object.entries(labels).map(([k,v])=>'<button class="chip" data-cat="'+k+'">'+v+'</button>').join('');
-$('visibleCount').textContent=DATA.length+' lugares';$('search').placeholder='⌕ Buscar por nombre, zona o referencia…';
-function show(tab){$('mapView').classList.toggle('hidden',tab!=='map');$('progressView').classList.toggle('hidden',tab!=='progress');$('mapTab').classList.toggle('active',tab==='map');$('progressTab').classList.toggle('active',tab==='progress')};$('mapTab').onclick=()=>{show('map');resizeMap();apply()};$('progressTab').onclick=()=>show('progress');
-function visible(d){return(category==='all'||category===d.cat)&&(!hide||!done.has(d.id))&&(!term||(d.name+' '+d.full+' '+d.reference+' '+d.tags.join(' ')).toLocaleLowerCase('es').includes(term))}
-function safe(t){return String(t||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function render(){refreshMarkers();const shown=DATA.filter(visible),pct=DATA.length?Math.round(done.size/DATA.length*100):0;$('pct').textContent=pct+'%';$('fraction').textContent=done.size+'/'+DATA.length;$('fill').style.width=pct+'%';$('statPct').textContent=pct+'%';$('statCount').textContent=done.size+'/'+DATA.length;$('visibleCount').textContent=shown.length+' lugares';$('pins').replaceChildren();let d=byId.get(selected)||DATA[0];if(!d)return;
-$('detail').innerHTML='<div class="tag" style="color:'+(colors[d.cat]||colors.other)+'">'+safe(labels[d.cat]||labels.other)+'</div><h3>'+safe(d.name)+'</h3><p class="muted">'+safe(d.full)+'</p>'+(d.reference?'<p class="muted" style="font-size:12px">Referencia: '+safe(d.reference)+'</p>':'')+'<p class="muted" style="font-size:12px">ID: '+safe(d.id)+' · Coordenadas originales: '+d.wx+', '+d.wy+'</p><button id="toggleDone" class="btn '+(done.has(d.id)?'secondary':'')+'">'+(done.has(d.id)?'✓ Visitado · Desmarcar':'✓ Marcar como visitado')+'</button>';
-$('toggleDone').onclick=()=>{done.has(d.id)?done.delete(d.id):done.add(d.id);save();render()};
-$('catStats').innerHTML=Object.keys(labels).map(k=>{const a=DATA.filter(d=>d.cat===k),n=a.filter(d=>done.has(d.id)).length;return '<div class="catstat"><div class="row"><span>'+labels[k]+'</span><span class="muted">'+n+'/'+a.length+'</span></div><div class="track"><div class="fill" style="width:'+(a.length?100*n/a.length:0)+'%;background:'+(colors[k]||colors.other)+'"></div></div></div>'}).join('');
-$('progressList').innerHTML='<p class="muted" style="font-size:12px">Mostrando los primeros '+Math.min(100,shown.length)+' de '+shown.length+' resultados. Utiliza el buscador para encontrar otros lugares.</p>'+shown.slice(0,100).map(d=>'<button class="listitem" data-id="'+safe(d.id)+'"><span><span style="color:'+(colors[d.cat]||colors.other)+'">●</span> '+safe(d.name)+' <small class="muted">'+safe(d.id)+'</small></span><span style="color:var(--mint)">'+(done.has(d.id)?'✓':'○')+'</span></button>').join('');$('progressList').querySelectorAll('button').forEach(b=>b.onclick=()=>{selectLandmark(byId.get(b.dataset.id))});
+let selected,category='all',term='',hide=false;const byId=new Map(DATA.map(d=>[d.id,d]));const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...done]));$('storageStatus').textContent='Progreso guardado en este navegador.'}catch(e){$('storageStatus').textContent='Almacenamiento no disponible; exporta tu progreso.'}};
+const filters = $('filters');
+filters.innerHTML = '<option value="all">Todas las categorías</option>' +
+ Object.entries(labels).map(([id, label]) => '<option value="' + id + '">' + label + '</option>').join('');
+const search = $('search');
+const results = $('searchResults');
+
+function show(tab) {
+ const mapActive = tab === 'map';
+ $('mapView').classList.toggle('hidden', !mapActive);
+ $('progressView').classList.toggle('hidden', mapActive);
+ $('mapTab').classList.toggle('active', mapActive);
+ $('progressTab').classList.toggle('active', !mapActive);
+ $('mapTab').setAttribute('aria-pressed', mapActive);
+ $('progressTab').setAttribute('aria-pressed', !mapActive);
 }
-filters.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{category=b.dataset.cat;filters.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render()});$('search').oninput=e=>{term=e.target.value.trim().toLocaleLowerCase('es');render();showSearchResults()};
-const results=document.createElement('div');results.id='searchResults';results.setAttribute('role','listbox');$('search').insertAdjacentElement('afterend',results);
-function showSearchResults(){
- results.replaceChildren();if(!term)return;
- const matches=DATA.filter(visible).slice(0,25);
- if(!matches.length){results.textContent='Sin resultados';return}
- for(const d of matches){const b=document.createElement('button');b.type='button';b.className='search-result';b.textContent=d.name+' · '+d.id+(d.full?' · '+d.full:'');b.onclick=()=>{
- term='';$('search').value='';results.replaceChildren();selectLandmark(d);
- };results.appendChild(b)}
+$('mapTab').onclick = () => {show('map'); resizeMap(); apply();};
+$('progressTab').onclick = () => show('progress');
+
+function visible(d) {
+ return (category === 'all' || category === d.cat) &&
+  (!hide || !done.has(d.id)) &&
+  (!term || [d.name, d.full, d.reference, ...d.tags].join(' ').toLocaleLowerCase('es').includes(term));
 }
-$('search').addEventListener('keydown',e=>{if(e.key==='Enter'){const b=results.querySelector('button');if(b){e.preventDefault();b.click()}}if(e.key==='Escape')results.replaceChildren()});$('hideDone').onchange=e=>{hide=e.target.checked;render()};
+
+function safe(t) {
+ return String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function areaOf(d) {
+ return d.full?.startsWith(d.name + ', ') ? d.full.slice(d.name.length + 2) : d.full === d.name ? '' : d.full;
+}
+
+for (const id of ['L266', 'L1', 'L3754']) {
+ const place = byId.get(id);
+ if (!place) continue;
+ const link = document.createElement('button');
+ link.type = 'button';
+ link.className = 'index-link';
+ link.innerHTML = '<span>' + safe(place.name) + '</span><span aria-hidden="true">↗</span>';
+ link.onclick = () => selectLandmark(place);
+ $('quickPlaces').appendChild(link);
+}
+
+function renderDetail() {
+ const d = byId.get(selected);
+ if (!d) {
+  $('detail').innerHTML = '<h2>Explora Leonida</h2><p class="muted">Busca un lugar o elige un marcador para abrir su ficha y registrar tu visita.</p>';
+  return;
+ }
+ const visited = done.has(d.id), area = areaOf(d);
+ $('detail').innerHTML =
+  '<p class="place-id">' + safe(d.id) + ' · ' + safe(labels[d.cat] || labels.other) + '</p>' +
+  '<h2>' + safe(d.name) + '</h2>' +
+  (area ? '<p class="muted">' + safe(area) + '</p>' : '') +
+  (d.reference ? '<p class="muted">Referencia real<br>' + safe(d.reference) + '</p>' : '') +
+  '<button type="button" id="toggleDone" class="btn' + (visited ? ' secondary' : '') + '" aria-pressed="' + visited + '">' +
+  (visited ? '✓ Visitado · Desmarcar' : 'Marcar como visitado') + '</button>';
+ $('toggleDone').onclick = () => {
+  if (visited) done.delete(d.id);
+  else done.add(d.id);
+  save();
+  render();
+  $('toggleDone').focus({preventScroll:true});
+ };
+}
+
+const formatNumber = new Intl.NumberFormat('es-ES');
+function render() {
+ refreshMarkers();
+ const shown = DATA.filter(visible);
+ const pct = DATA.length ? Math.round(done.size / DATA.length * 100) : 0;
+ const fraction = formatNumber.format(done.size) + '/' + formatNumber.format(DATA.length);
+ $('pct').textContent = pct + '%';
+ $('fraction').textContent = fraction;
+ $('fill').style.width = pct + '%';
+ $('statPct').textContent = pct + '%';
+ $('statCount').textContent = fraction + ' lugares';
+ $('visibleCount').textContent = formatNumber.format(shown.length) + ' lugares';
+ renderDetail();
+
+ $('catStats').innerHTML = Object.entries(labels).map(([id, label]) => {
+  const places = DATA.filter(d => d.cat === id);
+  const visits = places.filter(d => done.has(d.id)).length;
+  return '<div class="catstat"><div class="row"><span>' + label + '</span><span class="muted">' + visits + '/' + places.length +
+   '</span></div><div class="track" aria-hidden="true"><div class="fill" style="width:' +
+   (places.length ? 100 * visits / places.length : 0) + '%"></div></div></div>';
+ }).join('');
+
+ const listed = shown.slice(0, 100);
+ $('progressList').innerHTML =
+  '<p class="list-summary">' + (listed.length
+    ? formatNumber.format(listed.length) + ' de ' + formatNumber.format(shown.length) + ' lugares'
+    : 'Sin lugares para estos filtros') + '</p>' +
+  listed.map(d => '<button type="button" class="listitem" data-id="' + safe(d.id) + '"><span>' +
+   safe(d.name) + ' <small class="muted">' + safe(d.id) + '</small></span><span class="visit-status">' +
+   (done.has(d.id) ? '<span aria-label="Visitado">✓</span>' : '<span aria-label="Pendiente">○</span>') + '</span></button>').join('');
+}
+
+$('progressList').onclick = event => {
+ const button = event.target.closest('button[data-id]');
+ if (button) selectLandmark(byId.get(button.dataset.id));
+};
+
+function showSearchResults() {
+ results.replaceChildren();
+ if (!term) return;
+ const matches = DATA.filter(visible).slice(0, 25);
+ if (!matches.length) {
+  results.innerHTML = '<p class="empty-results" role="status">No hay lugares con esa búsqueda.</p>';
+  return;
+ }
+ for (const d of matches) {
+  const button = document.createElement('button');
+  const area = areaOf(d);
+  button.type = 'button';
+  button.className = 'search-result';
+  button.innerHTML = '<span><strong>' + safe(d.name) + '</strong>' +
+   (area ? '<small>' + safe(area) + '</small>' : '') + '</span><span class="place-id">' + safe(d.id) + '</span>';
+  button.onclick = () => {
+   term = '';
+   search.value = '';
+   results.replaceChildren();
+   selectLandmark(d);
+  };
+  results.appendChild(button);
+ }
+}
+
+filters.onchange = () => {
+ category = filters.value;
+ render();
+ showSearchResults();
+};
+search.oninput = () => {
+ term = search.value.trim().toLocaleLowerCase('es');
+ render();
+ showSearchResults();
+};
+search.addEventListener('focus', showSearchResults);
+search.addEventListener('keydown', event => {
+ if (event.key === 'Enter' || event.key === 'ArrowDown') {
+  const first = results.querySelector('button');
+  if (!first) return;
+  event.preventDefault();
+  if (event.key === 'Enter') first.click();
+  else first.focus();
+ }
+});
+search.parentElement.addEventListener('keydown', event => {
+ if (event.key === 'Escape' && results.childElementCount) {
+  event.preventDefault();
+  search.focus();
+  results.replaceChildren();
+ }
+});
+search.parentElement.addEventListener('focusout', event => {
+ if (!search.parentElement.contains(event.relatedTarget)) results.replaceChildren();
+});
+$('hideDone').onchange = () => {
+ hide = $('hideDone').checked;
+ render();
+ showSearchResults();
+};
 $('exportProgress').onclick=()=>{const payload={app:'leonida-atlas',version:2,dataset:'gtadb-landmarks',completed:[...done],exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='leonida-atlas-localizaciones-progreso.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 $('importProgress').onclick=()=>$('progressFile').click();$('progressFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const parsed=JSON.parse(await file.text());if(parsed.app!=='leonida-atlas'||parsed.dataset!=='gtadb-landmarks'||!Array.isArray(parsed.completed))throw Error('Formato incompatible');done=new Set(parsed.completed.filter(id=>byId.has(id)));save();render();$('storageStatus').textContent='Importados '+done.size+' lugares visitados.'}catch(err){$('storageStatus').textContent='Archivo incompatible: importa una copia de localizaciones v0.9.'}e.target.value=''};
-$('resetProgress').onclick=()=>{if(confirm('¿Reiniciar el progreso de localizaciones?')){done.clear();save();render()}};$('storageStatus').textContent='Los 12 marcadores demo de v0.8 se conservan en su almacenamiento anterior, sin mezclarlos con lugares reales.';
+$('resetProgress').onclick=()=>{if(confirm('¿Reiniciar el progreso de localizaciones?')){done.clear();save();render()}};
 // Gestures: pointer events, pinch around gesture midpoint, double tap, mouse wheel.
 // GTADB map artwork import: kept separately from our marker/progress layer.
 // Image is stored in IndexedDB so browser refresh does not lose it.
@@ -76,7 +460,7 @@ function requestPaint(){
  requestAnimationFrame(()=>{paintPending=false;paintTiles()});
 }
 function updateLayerStyle(){
- document.getElementById('mapStatus').textContent=mapLayer==='day'?'◉ GTADB · IN-GAME DAY':mapLayer==='night'?'◉ GTADB · YANIS NOCTURNO':'◉ GTADB · YANIS v18';
+ document.getElementById('mapStatus').textContent=mapLayer==='day'?'Leonida / Day':mapLayer==='night'?'Leonida / Nocturna':'Leonida / YANIS v18';
  requestPaint();
 }
 layerSelect.addEventListener('change',()=>{
@@ -108,7 +492,7 @@ function paintTiles(){
   canvas.width=pw;canvas.height=ph;
  }
  ctx.setTransform(pw/w,0,0,ph/h,0,0);
- ctx.fillStyle='#173c57';ctx.fillRect(0,0,w,h);
+ ctx.fillStyle = mapLayer === 'day' ? '#2f90b0' : '#2c66a5';ctx.fillRect(0,0,w,h);
  const z=Math.max(0,Math.min(mapLayer==='day'?6:5,Math.floor(Math.log2(Math.max(1,scale)))));
  const tileSize = unit * 256 / 2**z;
  const minX=Math.max(0,Math.floor((-tx)/tileSize)-1);
@@ -148,7 +532,7 @@ function bounds() {
 }
 
 function clampOffset(offset, viewportSize, mapSize) {
- if (mapSize <= viewportSize) return (viewportSize - mapSize) / 2;
+ if (mapSize <= viewportSize) return Math.max(0, Math.min(viewportSize - mapSize, offset));
  return Math.max(viewportSize - mapSize, Math.min(0, offset));
 }
 
@@ -179,6 +563,14 @@ function resizeMap() {
  apply();
 }
 
+function resetOverview() {
+ scale = 1.45;
+ const {w, h, unit} = bounds();
+ tx = w / 2 - 409 * unit;
+ ty = h / 2 - 500 * unit;
+ apply();
+}
+
 function zoomAt(next, cx, cy) {
  next = Math.max(minScale, Math.min(maxScale, next));
  const ratio = next / scale;
@@ -188,7 +580,7 @@ function zoomAt(next, cx, cy) {
  apply();
 }
 
-function point(e){const r=box.getBoundingClientRect();return{x:e.clientX-r.left-box.clientLeft,y:e.clientY-r.top-box.clientTop}}function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function mid(a,b){return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}box.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;if(e.target.closest('.pin'))return; if(e.pointerType==='mouse'&&e.button!==0)return;box.setPointerCapture(e.pointerId);pointers.set(e.pointerId,point(e));dragged=false;const ps=[...pointers.values()];prevPoint=ps.length===1?ps[0]:mid(ps[0],ps[1]);prevDist=ps.length>=2?distance(ps[0],ps[1]):0});box.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,point(e));const ps=[...pointers.values()];if(ps.length===1){const p=ps[0];if(prevPoint){const dx=p.x-prevPoint.x,dy=p.y-prevPoint.y;if(Math.abs(dx)+Math.abs(dy)>1)dragged=true;tx+=dx;ty+=dy;apply()}prevPoint=p}else if(ps.length>=2){const m=mid(ps[0],ps[1]),dist=distance(ps[0],ps[1]);if(prevPoint){tx+=m.x-prevPoint.x;ty+=m.y-prevPoint.y}if(prevDist>0)zoomAt(scale*dist/prevDist,m.x,m.y);else apply();prevPoint=m;prevDist=dist;dragged=true}});function end(e){if(!pointers.has(e.pointerId))return;const wasSingle=pointers.size===1;pointers.delete(e.pointerId);const ps=[...pointers.values()];prevPoint=ps.length?ps[0]:null;prevDist=0;if(wasSingle&&!dragged&&e.pointerType==='touch'&&!e.target.closest('.pin')){const now=Date.now();if(now-lastTap<320){const p=point(e);zoomAt(scale*1.7,p.x,p.y);lastTap=0}else lastTap=now}}box.addEventListener('pointerup',end);box.addEventListener('pointercancel',end);box.addEventListener('wheel',e=>{e.preventDefault();const p=point(e);zoomAt(scale*(e.deltaY<0?1.16:1/1.16),p.x,p.y)},{passive:false});box.addEventListener('dblclick',e=>{if(e.target.closest('button'))return;e.preventDefault();const p=point(e);zoomAt(scale*1.7,p.x,p.y)});$('zoomIn').onclick=()=>{const {w,h}=bounds();zoomAt(scale*1.35,w/2,h/2)};$('zoomOut').onclick=()=>{const {w,h}=bounds();zoomAt(scale/1.35,w/2,h/2)};$('resetMap').onclick=()=>{scale=1;tx=0;ty=0;apply()};new ResizeObserver(resizeMap).observe(box);
+function point(e){const r=box.getBoundingClientRect();return{x:e.clientX-r.left-box.clientLeft,y:e.clientY-r.top-box.clientTop}}function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function mid(a,b){return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}box.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;if(e.target.closest('.pin'))return; if(e.pointerType==='mouse'&&e.button!==0)return;box.setPointerCapture(e.pointerId);pointers.set(e.pointerId,point(e));dragged=false;const ps=[...pointers.values()];prevPoint=ps.length===1?ps[0]:mid(ps[0],ps[1]);prevDist=ps.length>=2?distance(ps[0],ps[1]):0});box.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,point(e));const ps=[...pointers.values()];if(ps.length===1){const p=ps[0];if(prevPoint){const dx=p.x-prevPoint.x,dy=p.y-prevPoint.y;if(Math.abs(dx)+Math.abs(dy)>1)dragged=true;tx+=dx;ty+=dy;apply()}prevPoint=p}else if(ps.length>=2){const m=mid(ps[0],ps[1]),dist=distance(ps[0],ps[1]);if(prevPoint){tx+=m.x-prevPoint.x;ty+=m.y-prevPoint.y}if(prevDist>0)zoomAt(scale*dist/prevDist,m.x,m.y);else apply();prevPoint=m;prevDist=dist;dragged=true}});function end(e){if(!pointers.has(e.pointerId))return;const wasSingle=pointers.size===1;pointers.delete(e.pointerId);const ps=[...pointers.values()];prevPoint=ps.length?ps[0]:null;prevDist=0;if(wasSingle&&!dragged&&e.pointerType==='touch'&&!e.target.closest('.pin')){const now=Date.now();if(now-lastTap<320){const p=point(e);zoomAt(scale*1.7,p.x,p.y);lastTap=0}else lastTap=now}}box.addEventListener('pointerup',end);box.addEventListener('pointercancel',end);box.addEventListener('wheel',e=>{e.preventDefault();const p=point(e);zoomAt(scale*(e.deltaY<0?1.16:1/1.16),p.x,p.y)},{passive:false});box.addEventListener('dblclick',e=>{if(e.target.closest('button'))return;e.preventDefault();const p=point(e);zoomAt(scale*1.7,p.x,p.y)});$('zoomIn').onclick=()=>{const {w,h}=bounds();zoomAt(scale*1.35,w/2,h/2)};$('zoomOut').onclick=()=>{const {w,h}=bounds();zoomAt(scale/1.35,w/2,h/2)};$('resetMap').onclick=resetOverview;new ResizeObserver(resizeMap).observe(box);
 let focusedLandmark;
 const markerLayer = $('realMarkers');
 
@@ -214,7 +606,13 @@ function selectLandmark(landmark) {
   apply(false);
  }
  render();
- if (!position) $('detail').scrollIntoView({behavior:'smooth', block:'nearest'});
+ if (position) {
+  box.focus({preventScroll:true});
+  box.scrollIntoView({block:'nearest'});
+ } else {
+  $('detail').scrollIntoView({block:'nearest'});
+ }
+
 }
 
 function refreshMarkers() {
@@ -234,11 +632,13 @@ function refreshMarkers() {
   if (landmark) {
    button.dataset.id = landmark.id;
    button.title = landmark.name;
+   button.setAttribute('aria-label', landmark.name);
    button.classList.toggle('visited', done.has(landmark.id));
    button.classList.toggle('selected', landmark.id === focusedLandmark);
    button.onclick = () => selectLandmark(landmark);
   } else {
    button.title = count + ' localizaciones';
+   button.setAttribute('aria-label', 'Acercar a ' + count + ' localizaciones');
    button.textContent = count > 99 ? '99+' : String(count);
    button.onclick = () => zoomAt(scale * 1.35, x, y);
   }
@@ -272,7 +672,7 @@ function refreshMarkers() {
  markerLayer.appendChild(markers);
 }
 
-apply(false);
+resetOverview();
 render();
 })();
 </script>
