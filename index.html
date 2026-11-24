@@ -17,6 +17,7 @@
  --green:#294538; --accent:#9b1d58; --cream:#fff8f1; --water:#2f90b0;
  --dusk:#28172e; --blush:#f8d8e2;
  --sunset-coral:#ff9979; --sunset-pink:#f46da2;
+ --visited:#287458; --selected:#ffdd75; --hover:#f8e5e9;
  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
  --serif:Georgia,"Times New Roman",serif;
 }
@@ -24,6 +25,7 @@
 body {margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
 button,input,select {font:inherit;color:inherit}
 button,select {cursor:pointer}
+::selection {background:var(--blush);color:var(--ink)}
 a {color:inherit;text-underline-offset:.2em}
 button,input,select,a {touch-action:manipulation}
 :focus-visible {outline:2px solid var(--accent);outline-offset:3px}
@@ -37,7 +39,7 @@ h1,h2,h3,p {margin:0}
 .brand {padding-bottom:17px}
 .brand p,.kicker,.map-caption,.count,.category-label,.place-id,.rank {font:600 11px/1.4 var(--mono);letter-spacing:.085em;text-transform:uppercase}
 .brand p {color:#ffd0ad;margin-bottom:5px}
-h1 {font:normal clamp(46px,6.1vw,97px)/.93 var(--serif);letter-spacing:-.065em;word-spacing:.065em}
+h1 {font:normal clamp(46px,5.6vw,86px)/.93 var(--serif);letter-spacing:-.045em;word-spacing:.065em}
 h1 em {color:#ffafbb;font-weight:normal}
 .tabs {display:flex;gap:22px;align-self:stretch;align-items:end}
 .tabs button {min-height:48px;padding:0 2px;background:none;border:0;border-bottom:3px solid transparent;color:#ffdfeb;white-space:nowrap;font-weight:650}
@@ -57,7 +59,7 @@ select {padding:6px 9px;max-width:100%}
 #searchResults:empty {display:none}
 .search-result,.listitem,.index-link {display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:47px;text-align:left;background:none;border:0;border-bottom:1px solid var(--rule);padding:10px 12px}
 .search-result:last-child,.index-link:last-child {border-bottom:0}
-.search-result:is(:hover,:focus-visible),.listitem:hover,.index-link:hover {background:var(--blush);color:var(--ink)}
+.search-result:is(:hover,:focus-visible),.listitem:hover,.index-link:hover {background:var(--hover);color:var(--ink)}
 .search-result strong,.search-result small {display:block}
 .search-result small,.muted {color:var(--muted)}
 .search-result small {font-size:12px}
@@ -74,22 +76,26 @@ select {padding:6px 9px;max-width:100%}
 #realMarkers {position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
 .real-pin,.real-cluster {position:absolute;transform:translate(-50%,-50%);border:1.5px solid var(--cream);background:var(--accent);color:#fff;pointer-events:auto;padding:0;box-shadow:0 1px 5px #142b2e65}
 .real-pin {width:15px;height:15px;border-radius:50%}
-.real-pin.visited {background:#287458}
-.real-pin.selected {width:22px;height:22px;background:#ffdd75;border:3px solid #252b21;z-index:1}
+.real-pin.visited {background:var(--visited)}
+.real-pin.selected {width:22px;height:22px;background:var(--selected);border:3px solid #252b21;z-index:1}
 .real-cluster {min-width:25px;height:25px;border-radius:50%;padding-inline:3px;background:#382039ed;font:650 11px var(--mono)}
 .real-pin:hover,.real-cluster:hover {outline:2px solid #fff}
 .zoom {position:absolute;right:13px;bottom:13px;z-index:4;display:grid;border:1px solid var(--ink);background:var(--cream)}
 .zoom button {width:44px;height:44px;border:0;background:transparent;font-size:23px}
 .zoom button + button {border-top:1px solid var(--rule)}
-.zoom button:hover {background:#e6e9dc}
-.zoom button:last-child {font-size:22px}
+.zoom button {display:grid;place-items:center}
+.zoom button:not([aria-disabled="true"]):hover {background:var(--hover)}
+.zoom button[aria-disabled="true"] {color:var(--muted);background:#f2e7e6;cursor:default}
+.zoom svg {width:19px;height:19px}
+#viewDetail {display:none}
 .map-tools {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:7px 13px;border-top:1px solid var(--ink)}
 .layer-picker {display:flex;align-items:center;gap:8px}
 .layer-picker label {font-size:13px;font-weight:650}
 #mapLayerSelect {min-height:44px}
 .map-legend {display:flex;gap:12px;color:var(--muted);font-size:12px}
 .map-legend span:before {content:"";display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:var(--accent)}
-.map-legend span:last-child:before {background:#287458}
+.map-legend .legend-visited:before {background:var(--visited)}
+.map-legend .legend-selected:before {background:var(--selected);border:1px solid var(--ink)}
 .field-notes {background:linear-gradient(155deg,#ffe1d2 0%,#ffe8ec 52%,#fff5ed 100%);display:flex;flex-direction:column;min-width:0;border-left:1px solid var(--ink)}
 .detail {padding:22px 20px;overflow-wrap:anywhere}
 .kicker,.category-label,.place-id {color:var(--accent)}
@@ -116,10 +122,10 @@ select {padding:6px 9px;max-width:100%}
 .btn.secondary:hover {background:var(--blush)}
 .btn:active,.zoom button:active {filter:brightness(.91)}
 .progress-title {display:flex;justify-content:space-between;align-items:end;gap:16px;border-block:1px solid var(--ink);padding:20px 0}
-.progress-title h2 {font:normal clamp(42px,6vw,86px)/.95 var(--serif);letter-spacing:-.06em}
+.progress-title h2 {font:normal clamp(40px,5.1vw,72px)/.95 var(--serif);letter-spacing:-.045em}
 .progress-title p {margin-top:6px}
 .progress-number {text-align:right}
-.progress-number strong {display:block;font:normal clamp(38px,6vw,78px)/.95 var(--serif);color:var(--accent);letter-spacing:-.07em}
+.progress-number strong {display:block;font:normal clamp(35px,4.8vw,64px)/.95 var(--serif);color:var(--accent);letter-spacing:-.07em}
 .progress-layout {display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,31%);gap:30px;padding:22px 0}
 .progress-layout h3 {font:normal 28px/1.1 var(--serif);margin-bottom:12px}
 .progress-list-panel {min-width:0}
@@ -140,7 +146,7 @@ select {padding:6px 9px;max-width:100%}
 .backup-buttons {display:flex;flex-wrap:wrap;gap:8px}
 #storageStatus:empty {display:none}
 #storageStatus {margin-top:8px}
-#resetProgress {margin-top:12px}
+#resetProgress {margin-top:12px;border-color:transparent;text-decoration:underline;text-underline-offset:.2em}
 footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--muted);padding:12px 0 20px;font-size:12px}
 [data-enter] {animation:atlas-in .3s ease-out both}
 @keyframes atlas-in {from {opacity:0;transform:translateY(4px)}}
@@ -162,6 +168,11 @@ footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;c
  .mapbox {height:clamp(310px,53svh,540px)}
  .map-caption {font-size:10px;min-height:34px;padding-inline:9px}
  .map-tools {padding-inline:9px}
+ #viewDetail:not([hidden]) {display:grid;position:absolute;bottom:13px;left:13px;z-index:4;
+  place-items:center;background:var(--cream);border:1px solid var(--ink);min-height:44px;
+  padding:0 12px;font-size:13px;font-weight:650;}
+ #viewDetail:hover {background:var(--hover)}
+ .map-legend .legend-selected {display:none}
  .field-notes {border-left:0;border-top:1px solid var(--ink)}
  .detail {padding:19px 14px}
  .place-index {padding-inline:14px}
@@ -213,19 +224,20 @@ footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;c
      <canvas id="tileCanvas" aria-hidden="true"></canvas>
      <svg id="map" viewBox="0 0 1024 1024" aria-hidden="true"><image id="gtadbLayer" x="0" y="0" width="1024" height="1024"/><g id="pins"></g></svg>
      <div id="realMarkers" aria-label="Marcadores de lugares"></div>
-     <div class="zoom" aria-label="Controles del mapa">
-      <button id="zoomIn" type="button" aria-label="Acercar">+</button>
-      <button id="zoomOut" type="button" aria-label="Alejar">−</button>
-      <button id="resetMap" type="button" aria-label="Restablecer vista">⌖</button>
+     <button id="viewDetail" type="button" aria-controls="detail" hidden>Ver ficha ↓</button>
+     <div class="zoom" role="group" aria-label="Controles del mapa">
+      <button id="zoomIn" type="button" aria-label="Acercar" title="Acercar"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10h10m-5-5v10"/></svg></button>
+      <button id="zoomOut" type="button" aria-label="Alejar" title="Alejar"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10h10"/></svg></button>
+      <button id="resetMap" type="button" aria-label="Restablecer vista" title="Restablecer vista"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V3h4m6 0h4v4m0 6v4h-4m-6 0H3v-4m7-5v4m-2-2h4"/></svg></button>
      </div>
     </div>
     <div class="map-tools">
      <div class="layer-picker"><label for="mapLayerSelect">Capa</label><select id="mapLayerSelect"><option value="day">Day</option><option value="yanis">YANIS v18</option><option value="night">Nocturna</option></select></div>
-     <div class="map-legend" aria-label="Leyenda"><span>Lugar</span><span>Visitado</span></div>
+     <div class="map-legend" aria-label="Leyenda"><span>Lugar</span><span class="legend-visited">Visitado</span><span class="legend-selected" id="selectedLegend" hidden>Seleccionado</span></div>
     </div>
    </div>
    <aside class="field-notes" aria-label="Lugares y registro">
-    <div id="detail" class="detail" aria-live="polite"></div>
+    <div id="detail" class="detail" tabindex="-1" aria-live="polite"></div>
     <section class="place-index" aria-labelledby="indexTitle">
      <h2 id="indexTitle" class="kicker">Lugares destacados</h2>
      <div id="quickPlaces"></div>
@@ -265,7 +277,7 @@ footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;c
   </div>
  </section>
 </main>
-<footer class="wrap"><span>Cartografía y lugares de <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener">GTADB y sus colaboradores</a> · CC BY 4.0</span><span>Leonida Atlas v0.10.2</span></footer>
+<footer class="wrap"><span>Cartografía y lugares de <a href="https://github.com/rolux/gtadb.org" target="_blank" rel="noopener">GTADB y sus colaboradores</a> · CC BY 4.0</span><span>Leonida Atlas v0.10.3</span></footer>
 <script src="assets/landmarks.js?v=092"></script><script src="assets/day-index.js?v=092"></script><script>
 (()=>{'use strict';const $=id=>document.getElementById(id),DATA=(window.LEONIDA_LANDMARKS||[]).map(v=>({id:v[0],name:v[1],cat:v[2],wx:v[3],wy:v[4],full:v[5],reference:v[6],tags:v[7]}));
 const labels={"residential":"Residencial","retail":"Comercios","transportation":"Transporte","natural":"Naturaleza","industrial":"Industrial","hotel":"Hoteles","leisure":"Ocio","government":"Gobierno","events":"Eventos","utilities":"Servicios","restaurant":"Restaurantes","public":"Espacios públicos","landmark":"Lugares destacados","enterable":"Interiores accesibles","other":"Otros"};
@@ -326,8 +338,16 @@ quickPlaces.onclick = event => {
  if (button) selectLandmark(byId.get(button.dataset.id));
 };
 
+$('viewDetail').onclick = () => {
+ const detail = $('detail');
+ detail.focus({preventScroll:true});
+ detail.scrollIntoView({block:'nearest'});
+};
+
 function renderDetail() {
  const d = byId.get(selected);
+ $('viewDetail').hidden = !d;
+ $('selectedLegend').hidden = !d;
  if (!d) {
   $('detail').innerHTML = '<h2>Explora Leonida</h2><p class="muted">Busca un lugar o elige un marcador para abrir su ficha y registrar tu visita.</p>';
   return;
@@ -577,6 +597,13 @@ function clampOffset(offset, viewportSize, mapSize) {
  return Math.max(viewportSize - mapSize, Math.min(0, offset));
 }
 
+function updateZoomControls() {
+ for (const [id, atLimit] of [['zoomIn', scale >= maxScale], ['zoomOut', scale <= minScale]]) {
+  // Keep the focused control in place when a keyboard action reaches the limit.
+  $(id).setAttribute('aria-disabled', atLimit);
+ }
+}
+
 function apply(refresh = true) {
  const viewport = bounds();
  const {w, h, side} = viewport;
@@ -585,6 +612,7 @@ function apply(refresh = true) {
  tx = clampOffset(tx, w, mapSize);
  ty = clampOffset(ty, h, mapSize);
  lastViewport = viewport;
+ updateZoomControls();
  updateTiles();
  if (refresh) refreshMarkers();
  svg.style.width = side + 'px';
@@ -621,7 +649,7 @@ function zoomAt(next, cx, cy) {
  apply();
 }
 
-function point(e){const r=box.getBoundingClientRect();return{x:e.clientX-r.left-box.clientLeft,y:e.clientY-r.top-box.clientTop}}function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function mid(a,b){return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}box.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;if(e.target.closest('.pin'))return; if(e.pointerType==='mouse'&&e.button!==0)return;box.setPointerCapture(e.pointerId);pointers.set(e.pointerId,point(e));dragged=false;const ps=[...pointers.values()];prevPoint=ps.length===1?ps[0]:mid(ps[0],ps[1]);prevDist=ps.length>=2?distance(ps[0],ps[1]):0});box.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,point(e));const ps=[...pointers.values()];if(ps.length===1){const p=ps[0];if(prevPoint){const dx=p.x-prevPoint.x,dy=p.y-prevPoint.y;if(Math.abs(dx)+Math.abs(dy)>1)dragged=true;tx+=dx;ty+=dy;apply()}prevPoint=p}else if(ps.length>=2){const m=mid(ps[0],ps[1]),dist=distance(ps[0],ps[1]);if(prevPoint){tx+=m.x-prevPoint.x;ty+=m.y-prevPoint.y}if(prevDist>0)zoomAt(scale*dist/prevDist,m.x,m.y);else apply();prevPoint=m;prevDist=dist;dragged=true}});function end(e){if(!pointers.has(e.pointerId))return;const wasSingle=pointers.size===1;pointers.delete(e.pointerId);const ps=[...pointers.values()];prevPoint=ps.length?ps[0]:null;prevDist=0;if(wasSingle&&!dragged&&e.pointerType==='touch'&&!e.target.closest('.pin')){const now=Date.now();if(now-lastTap<320){const p=point(e);zoomAt(scale*1.7,p.x,p.y);lastTap=0}else lastTap=now}}box.addEventListener('pointerup',end);box.addEventListener('pointercancel',end);box.addEventListener('wheel',e=>{e.preventDefault();const p=point(e);zoomAt(scale*(e.deltaY<0?1.16:1/1.16),p.x,p.y)},{passive:false});box.addEventListener('dblclick',e=>{if(e.target.closest('button'))return;e.preventDefault();const p=point(e);zoomAt(scale*1.7,p.x,p.y)});$('zoomIn').onclick=()=>{const {w,h}=bounds();zoomAt(scale*1.35,w/2,h/2)};$('zoomOut').onclick=()=>{const {w,h}=bounds();zoomAt(scale/1.35,w/2,h/2)};$('resetMap').onclick=resetOverview;new ResizeObserver(resizeMap).observe(box);
+function point(e){const r=box.getBoundingClientRect();return{x:e.clientX-r.left-box.clientLeft,y:e.clientY-r.top-box.clientTop}}function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function mid(a,b){return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}box.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;if(e.target.closest('.pin'))return; if(e.pointerType==='mouse'&&e.button!==0)return;box.setPointerCapture(e.pointerId);pointers.set(e.pointerId,point(e));dragged=false;const ps=[...pointers.values()];prevPoint=ps.length===1?ps[0]:mid(ps[0],ps[1]);prevDist=ps.length>=2?distance(ps[0],ps[1]):0});box.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,point(e));const ps=[...pointers.values()];if(ps.length===1){const p=ps[0];if(prevPoint){const dx=p.x-prevPoint.x,dy=p.y-prevPoint.y;if(Math.abs(dx)+Math.abs(dy)>1)dragged=true;tx+=dx;ty+=dy;apply()}prevPoint=p}else if(ps.length>=2){const m=mid(ps[0],ps[1]),dist=distance(ps[0],ps[1]);if(prevPoint){tx+=m.x-prevPoint.x;ty+=m.y-prevPoint.y}if(prevDist>0)zoomAt(scale*dist/prevDist,m.x,m.y);else apply();prevPoint=m;prevDist=dist;dragged=true}});function end(e){if(!pointers.has(e.pointerId))return;const wasSingle=pointers.size===1;pointers.delete(e.pointerId);const ps=[...pointers.values()];prevPoint=ps.length?ps[0]:null;prevDist=0;if(wasSingle&&!dragged&&e.pointerType==='touch'&&!e.target.closest('.pin')){const now=Date.now();if(now-lastTap<320){const p=point(e);zoomAt(scale*1.7,p.x,p.y);lastTap=0}else lastTap=now}}box.addEventListener('pointerup',end);box.addEventListener('pointercancel',end);box.addEventListener('wheel',e=>{e.preventDefault();const p=point(e);zoomAt(scale*(e.deltaY<0?1.16:1/1.16),p.x,p.y)},{passive:false});box.addEventListener('dblclick',e=>{if(e.target.closest('button'))return;e.preventDefault();const p=point(e);zoomAt(scale*1.7,p.x,p.y)});$('zoomIn').onclick=()=>{if(scale>=maxScale)return;const {w,h}=bounds();zoomAt(scale*1.35,w/2,h/2)};$('zoomOut').onclick=()=>{if(scale<=minScale)return;const {w,h}=bounds();zoomAt(scale/1.35,w/2,h/2)};$('resetMap').onclick=resetOverview;new ResizeObserver(resizeMap).observe(box);
 let focusedLandmark;
 const markerLayer = $('realMarkers');
 
