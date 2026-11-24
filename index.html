@@ -160,6 +160,7 @@ footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;c
  .progress-side {border-left:0;border-top:1px solid var(--rule);padding:16px 0 0}
 }
 @media (max-width:360px) {
+ #filters {font-size:13px}
  .map-legend {gap:6px;font-size:10px}
  .layer-picker {gap:5px}
  #mapLayerSelect {max-width:119px;font-size:13px}
@@ -184,7 +185,7 @@ footer.wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;c
  <div class="toolbar" aria-label="Buscar y filtrar lugares">
   <div class="search-field">
    <span aria-hidden="true"></span>
-   <input id="search" type="search" placeholder="Buscar por nombre, zona o referencia" aria-label="Buscar lugares" autocomplete="off">
+   <input id="search" type="search" placeholder="Buscar por nombre o zona" aria-label="Buscar lugares" autocomplete="off">
    <div id="searchResults" aria-label="Resultados"></div>
   </div>
   <select id="filters" aria-label="Categoría de lugares"></select>
